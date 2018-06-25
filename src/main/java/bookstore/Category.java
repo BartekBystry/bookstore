@@ -1,14 +1,11 @@
 package bookstore;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
     private Integer id;
     private String name;
