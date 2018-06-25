@@ -13,4 +13,9 @@ public class Category {
     private Integer id;
     private String name;
     private Integer parentId;
+
+    public Category(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
