@@ -18,8 +18,14 @@ public class InMemoryCategoryDAO implements CategorySource{
     //DTO - Data Transfer Object
     private static InMemoryCategoryDAO instance;
     private List<Category> categoriesInMemory;
+    private static CategoryDataSource categoryDataSource;
 
-    protected InMemoryCategoryDAO(){
+    private InMemoryCategoryDAO(){
+        categoriesInMemory = initializeCategories();
+    }
+
+    protected InMemoryCategoryDAO(CategoryDataSource categoryDataSource){
+        this.categoryDataSource = categoryDataSource;
         categoriesInMemory = initializeCategories();
     }
 
