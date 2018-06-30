@@ -3,6 +3,7 @@ package bookstore;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -61,7 +62,8 @@ public class InMemoryCategoryDAO implements CategorySource{
     }
 
     private int countSpaces(Category category) {
-        return category.getName().startsWith(" ") ? category.getName().split("\\S")[0].length() : 0;
+        return category.getName().startsWith(" ") || category.getName().startsWith("\t") ?
+                category.getName().split("\\S")[0].length() : 0;
     }
 
     private void populateRecursive(int level, Map<Integer, List<Category>> categoryMap) {
@@ -87,7 +89,11 @@ public class InMemoryCategoryDAO implements CategorySource{
     private List<String> readDataFromFile() {
         List<String> linesFromFile = null;
         try {
-            linesFromFile = Files.readAllLines(Paths.get("/home/bystry/IdeaProjects/BookstoreLocal/src/main/resources/kategorie.txt"), Charset.forName("UTF-16"));
+            try {
+                linesFromFile = Files.readAllLines(Paths.get(this.getClass().getClassLoader().getResource("kategorie2.txt").toURI()), Charset.forName("UNICODE"));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
