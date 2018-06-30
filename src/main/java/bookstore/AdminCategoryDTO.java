@@ -3,6 +3,7 @@ package bookstore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Setter
@@ -15,6 +16,6 @@ public class AdminCategoryDTO {
     private String parentCategoryId;
 
     public String getParent(){
-        return null; //todo
+        return StringUtils.isBlank(parentCategoryId) ? "#" : parentCategoryId;
     }
 }
