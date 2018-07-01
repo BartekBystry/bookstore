@@ -5,7 +5,9 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LambdasExample {
 
@@ -102,7 +104,7 @@ public class LambdasExample {
                 return val1.getName().compareTo(val2.getName());
             }
         };
-        
+
         MyComparator compareByNameUsingString = new MyComparator<Category>() {
             @Override
             public int customCompare(Category val1, Category val2) {
@@ -120,12 +122,28 @@ public class LambdasExample {
         int customCompareByIntegerId = compareByIntegerId.customCompare(category1, category2);
         Assertions.assertEquals(-1, customCompareByIntegerId);
 
-        //pierwsze sortowanie po id
+        Collections.sort(categories, (a, b) -> a.getId().compareTo(b.getId()));
         Assertions.assertTrue(categories.get(0).getId().equals(1));
         //drugie sortowanie po name
+        Collections.sort(categories, (a, b) -> Integer.valueOf(a.getName()).compareTo(Integer.valueOf(b.getName())));
         Assertions.assertTrue(categories.get(0).getId().equals(3));
         //trzecie sortowanie po name string
+        Collections.sort(categories, (a, b) -> a.getName().compareTo(b.getName()));
         Assertions.assertTrue(categories.get(0).getId().equals(1));
     }
 
+    @FunctionalInterface
+    interface myBiComparator<T, U> {
+        int biCompare(T obj1, U obj2);
+    }
+
+    @Test
+    void compareTwoTypes() {
+        Integer x = 20;
+        String s = "21";
+
+        myBiComparator<Integer, String> myBiComparator = (a, b) -> a.compareTo(Integer.valueOf(b));
+        int biCompare = myBiComparator.biCompare(x, s);
+        Assertions.assertTrue(-1 == biCompare);
+    }
 }
