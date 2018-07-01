@@ -1,5 +1,11 @@
+import bookstore.AdminCategoryDTO;
+import bookstore.Category;
+import com.google.common.collect.Lists;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class LambdasExample {
 
@@ -75,5 +81,51 @@ public class LambdasExample {
         return mathOperation.operation(a, b);
     }
 
+    @FunctionalInterface
+    public interface MyComparator<T> {
+        int customCompare(T val1, T val2);
+    }
+
+    @Test
+    void compareTest() {
+        Category category1 = new Category(1, "1223");
+        Category category2 = new Category(3, "223");
+        List<Category> categories = Lists.newArrayList(category1, category2);
+
+        AdminCategoryDTO cat1 = AdminCategoryDTO.builder().id("1234").text("Kat 1").build();
+        AdminCategoryDTO cat2 = AdminCategoryDTO.builder().id("234").text("Kat 2").build();
+        List<AdminCategoryDTO> categoryDTOS = Lists.newArrayList(cat1, cat2);
+
+        MyComparator compareByIntegerId = new MyComparator<Category>() {
+            @Override
+            public int customCompare(Category val1, Category val2) {
+                return val1.getName().compareTo(val2.getName());
+            }
+        };
+        
+        MyComparator compareByNameUsingString = new MyComparator<Category>() {
+            @Override
+            public int customCompare(Category val1, Category val2) {
+                return val1.getName().compareTo(val2.getName());
+            }
+        };
+
+        MyComparator<Category> compareByNameUsingValue = (x, y) -> Integer.valueOf(x.getName()).compareTo(Integer.valueOf(y.getName()));
+        int customCompareByStringNumberValue = compareByNameUsingValue.customCompare(category1, category2);
+
+
+        int customCompareByString = compareByNameUsingString.customCompare(category1, category2);
+        Assertions.assertEquals(-1, customCompareByString);
+
+        int customCompareByIntegerId = compareByIntegerId.customCompare(category1, category2);
+        Assertions.assertEquals(-1, customCompareByIntegerId);
+
+        //pierwsze sortowanie po id
+        Assertions.assertTrue(categories.get(0).getId().equals(1));
+        //drugie sortowanie po name
+        Assertions.assertTrue(categories.get(0).getId().equals(3));
+        //trzecie sortowanie po name string
+        Assertions.assertTrue(categories.get(0).getId().equals(1));
+    }
 
 }
