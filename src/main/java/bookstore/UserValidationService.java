@@ -21,13 +21,13 @@ public class UserValidationService {
 
     public Map<String, String> validateUserData(CustomerRegistrationDTO dto) {
         Map<String, String> errorsResult = Maps.newHashMap();
-        if (dto.getFirstName().length() < 3) {
+        if (StringUtils.isBlank(dto.getFirstName()) || dto.getFirstName().trim().length() < 3) {
             errorsResult.put(FIRST_NAME_VAL_RES, "Imię jest wymagane. Przynajmniej 3 znaki");
         }
-        if (dto.getLastName().length() < 3) {
+        if (StringUtils.isBlank(dto.getLastName()) || dto.getLastName().length() < 3) {
             errorsResult.put(LAST_NAME_VAL_RES, "Nazwisko jest wymagane. Przynajmniej 3 znaki");
         }
-        if (!dto.getZipCode().matches("^[0-9]{2}-[0-9]{3}$")) {
+        if (StringUtils.isBlank(dto.getZipCode()) ||!dto.getZipCode().matches("^[0-9]{2}-[0-9]{3}$")) {
             errorsResult.put(ZIP_CODE_VAL_RES, "Zły format. Kod pocztowy powinien mieć format 12-345");
         }
         if (StringUtils.isBlank(dto.getCity())) {
@@ -39,19 +39,19 @@ public class UserValidationService {
         if (StringUtils.isBlank(dto.getStreet())) {
             errorsResult.put(STREET_VAL_RES, "Podanie nazwy ulicy jest wymagane");
         }
-        if (!dto.getBirthDate().matches("^([1][9][0-9]{2}|[2][0][0-1][0-9])-([0][0-9]|[1][0-2])-([12][0-9]|[0][1-9]|[3][0-1])$")) {
+        if (StringUtils.isBlank(dto.getBirthDate()) ||!dto.getBirthDate().matches("^([1][9][0-9]{2}|[2][0][0-1][0-9])-([0][0-9]|[1][0-2])-([12][0-9]|[0][1-9]|[3][0-1])$")) {
             errorsResult.put(BIRTH_DATE_VAL_RES, "Zły format. Data powinna być podana w formacie RRRR-MM-DD");
         }
-        if (!dto.getPersonalId().matches("^[0-9]{11}")) {
+        if (StringUtils.isBlank(dto.getPersonalId()) ||!dto.getPersonalId().matches("^[0-9]{11}")) {
             errorsResult.put(PERSONAL_ID_VAL_RES, "Zły format. Numer Pesel powinien składać się z 11 cyfr");
         }
-        if (!dto.getEmail().matches("^\\w+@\\w+\\.\\w+$")) {
+        if (StringUtils.isBlank(dto.getEmail()) ||!dto.getEmail().matches("^\\w+@\\w+\\.\\w+$")) {
             errorsResult.put(EMAIL_VAL_RES, "Zły format adresu e-mail");
         }
-        if (dto.getPassword().length() < 10 || dto.getPassword().length() > 20) {
+        if (StringUtils.isBlank(dto.getPassword()) ||dto.getPassword().length() < 10 || dto.getPassword().length() > 20) {
             errorsResult.put(PASSWORD_VAL_RES, "Hasło jest wymagane. Musi zawierać od 10 do 20 znaków");
         }
-        if (dto.getPhone().length() != 9) {
+        if (StringUtils.isBlank(dto.getPhone()) ||dto.getPhone().length() != 9) {
             errorsResult.put(PHONE_NUMBER_VAL_RES, "Zły format. Numer telefonu powinien składać się z 9 cyfr");
         }
         return errorsResult;
