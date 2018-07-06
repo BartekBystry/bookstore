@@ -8,14 +8,17 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 @Setter
 @Builder
-public class AdminCategoryDTO {
+public class AdminCategoryDTO
+        implements CategoryInfoHolder {
     private String id;
     private String text;
     private CategoryState state;
-    private AdminCategoryDTO parentCat;
+    private AdminCategoryDTO parentCat; //to musiałem zmienić z uwagi na frontendowców
     private String parentCategoryId;
 
-    public String getParent(){
+    //frontendowcy się uparli i oczekują od nas wartości parent id
+    // wystawionej w takiej metodzie, albo # jeśli nie ma parenta
+    public String getParent() {
         return StringUtils.isBlank(parentCategoryId) ? "#" : parentCategoryId;
     }
 }

@@ -1,6 +1,5 @@
 package bookstore;
 
-import javax.validation.constraints.Max;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,18 +9,17 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class CategoryDataSource {
-    public List<String> readDataFromFile(){
+    public List<String> readDataFromFile() {
         List<String> linesFromFile = null;
         try {
+
             URI uri = this.getClass().getClassLoader().getResource("kategorie.txt").toURI();
             linesFromFile = Files.readAllLines(Paths.get(uri), Charset.forName("UNICODE"));
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }catch (URISyntaxException e){
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return linesFromFile;
     }
-
 }

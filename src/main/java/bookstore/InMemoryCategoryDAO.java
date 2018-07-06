@@ -14,68 +14,82 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class InMemoryCategoryDAO implements CategorySource{
-    //DAO - Data Access Object
-    //DTO - Data Transfer Object
+public class InMemoryCategoryDAO implements CategorySource {
+    // DAO Data Access Object
+    // DTO Data Transfer Object
     private static InMemoryCategoryDAO instance;
     private List<Category> categoriesInMemory;
     private static CategoryDataSource categoryDataSource;
 
-    protected InMemoryCategoryDAO(){
+
+    private InMemoryCategoryDAO() {
         categoriesInMemory = initializeCategories();
     }
 
-    protected InMemoryCategoryDAO(CategoryDataSource categoryDataSource){
+    protected InMemoryCategoryDAO(CategoryDataSource categoryDataSource) {
         this.categoryDataSource = categoryDataSource;
         categoriesInMemory = initializeCategories();
     }
 
-    public static InMemoryCategoryDAO getInstance(){
-        //sprawdzamy z uwagi na wielowatkowosc
-        if (instance == null){
-            //Z uwagi na wielowatkowosc aby
-            //na pewno tylko jeden watek utworzyl instancje
-            synchronized (InMemoryCategoryDAO.class){
-                if (instance == null){
-                    instance = new InMemoryCategoryDAO();
+    public static InMemoryCategoryDAO getInstance() {
+        // sprawdzamy z uwagi na wydajnosc synchronized
+        if (instance == null) {
+            // z uwagi na wielowątkowość, by na pewno
+            // tylko jeden wątek utworzył instancję
+            synchronized (InMemoryCategoryDAO.class) {
+                if (instance == null) {
+                    CategoryDataSource categoryDataSource = new CategoryDataSource();
+                    instance = new InMemoryCategoryDAO(categoryDataSource);
                 }
             }
         }
         return instance;
     }
 
-    public List<Category> initializeCategories(){
+    private List<Category> initializeCategories() {
         List<String> linesFromFile = readDataFromFile();
         return populateCategories(linesFromFile);
+    }
+
+    public List<String> readDataFromFile() {
+        List<String> linesFromFile = null;
+        try {
+            linesFromFile = Files.readAllLines(
+                    Paths.get(this.getClass().getClassLoader().getResource("kategorie2.txt").toURI()), Charset.forName("UNICODE"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return linesFromFile;
     }
 
     private List<Category> populateCategories(List<String> linesFromFile) {
         AtomicInteger idCounter = new AtomicInteger(1);
         List<Category> categoryList = linesFromFile.stream()
-                .map(e -> new Category(idCounter.getAndIncrement(),e))
+                .map(e -> new Category(idCounter.getAndIncrement(), e))
                 .collect(Collectors.toList());
-        Map<Integer,List<Category>> categoryMap = categoryList.stream()
+        Map<Integer, List<Category>> categoryMap = categoryList.stream()
                 .collect(Collectors.groupingBy(e -> countSpaces(e)));
-        populateRecursive(0,categoryMap);
-        categoryList.forEach(category -> category.setName(category.getName().trim()));
+        populateRecursive(0, categoryMap);
+        categoryList
+                .forEach(category -> category
+                        .setName(category
+                                .getName()
+                                .trim()));
         return categoryList;
-    }
-
-    private int countSpaces(Category category) {
-        return category.getName().startsWith(" ") || category.getName().startsWith("\t") ?
-                category.getName().split("\\S")[0].length() : 0;
     }
 
     private void populateRecursive(int level, Map<Integer, List<Category>> categoryMap) {
         List<Category> categories = categoryMap.get(level);
-        if (categories == null){
+        if (categories == null) {
             return;
         }
         for (Category category : categories) {
-            if(level == 0){
+            if (level == 0) {
                 category.setParentId(null);
-            }else{
-                Integer parentId = categoryMap.get(level-1).stream()
+            } else {
+                Integer parentId = categoryMap.get(level - 1).stream()
                         .map(e -> e.getId())
                         .filter(e -> e < category.getId())
                         .sorted(Comparator.reverseOrder())
@@ -83,31 +97,23 @@ public class InMemoryCategoryDAO implements CategorySource{
                 category.setParentId(parentId);
             }
         }
-        populateRecursive(level + 1, categoryMap );
+        populateRecursive(level + 1, categoryMap);
     }
 
-    private List<String> readDataFromFile() {
-        List<String> linesFromFile = null;
-        try {
-            try {
-                linesFromFile = Files.readAllLines(Paths.get(this.getClass().getClassLoader().getResource("kategorie2.txt").toURI()), Charset.forName("UNICODE"));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return linesFromFile;
+    private int countSpaces(Category category) {
+        return category.getName().startsWith(" ") || category.getName().startsWith("\t") ?
+                category.getName().split("\\S")[0].length() : 0;
     }
 
     @Override
     public void updateCategory(Category category) {
-        throw new NotImplementedException("boooooo");
+        throw new NotImplementedException("Pudlo");
     }
 
     @Override
     public List<Category> findCategoriesByName(String name) {
-        return categoriesInMemory.stream()
+        return categoriesInMemory
+                .stream()
                 .filter(category -> category.getName().equals(name))
                 .collect(Collectors.toList());
     }
@@ -119,7 +125,8 @@ public class InMemoryCategoryDAO implements CategorySource{
 
     @Override
     public Optional<Category> findCategoryById(Integer id) {
-        return categoriesInMemory.stream()
+        return categoriesInMemory
+                .stream()
                 .filter(category -> category.getId().equals(id))
                 .findFirst();
     }

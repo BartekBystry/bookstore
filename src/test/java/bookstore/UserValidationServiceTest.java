@@ -36,7 +36,7 @@ public class UserValidationServiceTest {
         UserValidationService userValidationService = new UserValidationService();
         CustomerRegistrationDTO user = createUserDatawithWhiteSpaces();
         Map<String, String> errorsMap = userValidationService.validateUserData(user);
-        Assertions.assertTrue(errorsMap.isEmpty());// TODO: 01.07.18  
+        Assertions.assertTrue(errorsMap.isEmpty());// TODO: 01.07.18
     }
 
     private CustomerRegistrationDTO createUserWithNullValues() {
