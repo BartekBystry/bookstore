@@ -5,11 +5,13 @@ public class UserRegistrationService {
     private UserDAO userDAO = new UserDAO();
 
 
-    private void registerUser(CustomerRegistrationDTO customer) {
+    public void registerUser(CustomerRegistrationDTO registrationDTO) {
 
-        if (userExistsVer1(customer)) {
-            throw new UserExistsException("User " + customer.getEmail() + " exists");
+        if (userExistsVer1(registrationDTO)) {
+            throw new UserExistsException("User " + registrationDTO.getEmail() + " exists");
         }
+        User user = CustomerRegistrationDtoToUserBuilder.rewriteToUser(registrationDTO);
+        userDAO.addUser(user);
         //todo nalezy przepisac dane z  CustomerRegistrationDTO na User -> zapisujac hash hasla i potem dodac uzytkownika do listy userow w userdao
 
 
@@ -22,7 +24,7 @@ public class UserRegistrationService {
 
     private boolean userExistsVer1(CustomerRegistrationDTO customer) {
         for (User user : userDAO.getUserList()) {
-            if (user.getEmail().equals(customer.getEmail())) {
+            if (user.getEmail().trim().equalsIgnoreCase(customer.getEmail().trim())) {
                 return true;
             }
         }
@@ -41,4 +43,6 @@ public class UserRegistrationService {
                 .map(user -> user.getEmail())
                 .anyMatch(e -> e.equals(customer.getEmail()));
     }
+
+
 }
