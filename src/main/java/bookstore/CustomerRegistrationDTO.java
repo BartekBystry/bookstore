@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CustomerRegistrationDTO {
 
-    private UserAdress userAdress;
+    private UserAdress userAddress;
     private String firstName;
     private String lastName;
     private String birthDate;

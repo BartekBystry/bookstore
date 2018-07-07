@@ -16,7 +16,7 @@ class UserValidationServiceTest {
     }
 
     @Test
-    void shouldNotPassValidationWithWrongBirthDate() {
+    void shouldNotPassValidationWithWrongbirthDate() {
         CustomerRegistrationDTO user = createUserWithProperData();
         user.setBirthDate("12341212");
         UserValidationService userValidationService = new UserValidationService();
@@ -59,8 +59,8 @@ class UserValidationServiceTest {
         CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
         customer.setFirstName("Krzysztof");
         customer.setLastName("Adfsfds");
-        customer.setUserAdress(new UserAdress());
-        UserAdress ua = customer.getUserAdress();
+        customer.setUserAddress(new UserAdress());
+        UserAdress ua = customer.getUserAddress();
         ua.setZipCode("87-123");
         ua.setCity("łódź");
         ua.setCountry("Poland");
@@ -78,8 +78,8 @@ class UserValidationServiceTest {
         CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
         customer.setFirstName(" Krzysztof ");
         customer.setLastName(" Adfsfds ");
-        customer.setUserAdress(new UserAdress());
-        UserAdress ua = customer.getUserAdress();
+        customer.setUserAddress(new UserAdress());
+        UserAdress ua = customer.getUserAddress();
         ua.setZipCode("87-123");
         ua.setCity("łódź");
         ua.setCountry("Poland");
