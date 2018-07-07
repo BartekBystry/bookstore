@@ -5,77 +5,93 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-public class UserValidationServiceTest {
+class UserValidationServiceTest {
 
     @Test
     void shouldPassValidationWithProperUserData() {
+        CustomerRegistrationDTO user = createUserWithProperData();
         UserValidationService userValidationService = new UserValidationService();
-        Map<String, String> errorsMap = userValidationService.validateUserData(createUserWithProperData());
+        Map<String, String> errorsMap = userValidationService.validateUserData(user);
         Assertions.assertTrue(errorsMap.isEmpty());
     }
 
     @Test
-    void shouldNotPassValidateWithWrongBirthDate() {
-        UserValidationService userValidationService = new UserValidationService();
+    void shouldNotPassValidationWithWrongBirthDate() {
         CustomerRegistrationDTO user = createUserWithProperData();
         user.setBirthDate("12341212");
+        UserValidationService userValidationService = new UserValidationService();
         Map<String, String> errorsMap = userValidationService.validateUserData(user);
-        Assertions.assertTrue(errorsMap.containsKey(UserValidationService.BIRTH_DATE_VAL_RES));
+
+        Assertions.assertTrue(
+                errorsMap.containsKey(UserValidationService.BIRTH_DATA_VAL_RES));
     }
 
     @Test
-    void shouldNotPassValidateWithNullValues() {
+    void shouldNotPassValidationWithNullValues() {
+        CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
         UserValidationService userValidationService = new UserValidationService();
-        CustomerRegistrationDTO user = createUserWithNullValues();
-        Map<String, String> errorsMap = userValidationService.validateUserData(user);
+        Map<String, String> errorsMap = userValidationService.validateUserData(customer);
+
         Assertions.assertTrue(!errorsMap.isEmpty());
     }
 
     @Test
     void shouldPassValidationWithWhiteSpaces() {
+        CustomerRegistrationDTO customer = createUserWithDataWithWhiteSpaces();
         UserValidationService userValidationService = new UserValidationService();
-        CustomerRegistrationDTO user = createUserDatawithWhiteSpaces();
-        Map<String, String> errorsMap = userValidationService.validateUserData(user);
-        Assertions.assertTrue(errorsMap.isEmpty());// TODO: 01.07.18
+        Map<String, String> errorsMap = userValidationService.validateUserData(customer);
+
+        Assertions.assertTrue(errorsMap.isEmpty());
     }
 
-    private CustomerRegistrationDTO createUserWithNullValues() {
-        return new CustomerRegistrationDTO();
+    @Test
+    void shouldNotPassValidationWithBrokenPhone() {
+        CustomerRegistrationDTO customer = createUserWithDataWithWhiteSpaces();
+        customer.setPhone("789456a23");
+        UserValidationService userValidationService = new UserValidationService();
+        Map<String, String> errorsMap = userValidationService.validateUserData(customer);
+
+        Assertions.assertTrue(
+                errorsMap.containsKey(UserValidationService.PHONE_VAL_RES));
     }
 
     private CustomerRegistrationDTO createUserWithProperData() {
-        CustomerRegistrationDTO customer1 = new CustomerRegistrationDTO();
-        customer1.setFirstName("Bartek");
-        customer1.setLastName("Bystry");
-        customer1.setZipCode("93-122");
-        customer1.setCity("Lodz");
-        customer1.setCountry("Poland");
-        customer1.setStreet("Blotna 12");
-        customer1.setBirthDate("1986-07-26");
-        customer1.setPersonalId("12345678910");
-        customer1.setEmail("hsdjhasjhd@wp.pl");
-        customer1.setPassword("1234567898765");
-        customer1.setPhone("123456789");
-        customer1.setPreferEmails(false);
-
-        return customer1;
+        CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
+        customer.setFirstName("Krzysztof");
+        customer.setLastName("Adfsfds");
+        customer.setUserAdress(new UserAdress());
+        UserAdress ua = customer.getUserAdress();
+        ua.setZipCode("87-123");
+        ua.setCity("łódź");
+        ua.setCountry("Poland");
+        ua.setStreet("Zielona");
+        customer.setBirthDate("1998-10-13");
+        customer.setPesel("78945612321");
+        customer.setEmail("sdafadsgf@wp.pl");
+        customer.setPassword("assdddsfssdfg");
+        customer.setPhone("789456123");
+        customer.setPreferEmails(false);
+        return customer;
     }
 
-    private CustomerRegistrationDTO createUserDatawithWhiteSpaces() {
-        CustomerRegistrationDTO customer1 = new CustomerRegistrationDTO();
-        customer1.setFirstName(" Bartek");
-        customer1.setLastName(" Bystry");
-        customer1.setZipCode(" 93-122");
-        customer1.setCity(" Lodz");
-        customer1.setCountry(" Poland");
-        customer1.setStreet(" Blotna 12");
-        customer1.setBirthDate(" 1986-07-26");
-        customer1.setPersonalId(" 12345678910");
-        customer1.setEmail(" hsdjhasjhd@wp.pl");
-        customer1.setPassword(" 1234567898765");
-        customer1.setPhone(" 123456789");
-        customer1.setPreferEmails(false);
-
-        return customer1;
+    private CustomerRegistrationDTO createUserWithDataWithWhiteSpaces() {
+        CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
+        customer.setFirstName(" Krzysztof ");
+        customer.setLastName(" Adfsfds ");
+        customer.setUserAdress(new UserAdress());
+        UserAdress ua = customer.getUserAdress();
+        ua.setZipCode("87-123");
+        ua.setCity("łódź");
+        ua.setCountry("Poland");
+        ua.setStreet("Zielona");
+        customer.setBirthDate(" 1998-10-13");
+        customer.setPesel(" 78945612321 ");
+        customer.setEmail(" sdafadsgf@wp.pl ");
+        customer.setPassword(" assdddsfssdfg ");
+        customer.setPhone(" 789456123 ");
+        customer.setPreferEmails(false);
+        return customer;
     }
+
+
 }

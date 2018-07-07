@@ -3,7 +3,6 @@ package bookstore;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserValidationService {
@@ -31,17 +30,17 @@ public class UserValidationService {
             errorsResult.put
                     (LAST_NAME_VAL_RES, "Nazwisko jest wymagane. Przynajmniej 3 znaki.");
         }
-        if (StringUtils.isBlank(dto.getZipCode()) || !dto.getZipCode().trim().matches("^[0-9]{2}-[0-9]{3}$")) {
+        if (dto.getUserAdress() == null || StringUtils.isBlank(dto.getUserAdress().getZipCode()) || !dto.getUserAdress().getZipCode().trim().matches("^[0-9]{2}-[0-9]{3}$")) {
             errorsResult.put
                     (ZIP_CODE_VAL_RES, "Zły format. Kod pocztowy powinien mieć format 12-345.");
         }
-        if (StringUtils.isBlank(dto.getCity())) {
+        if (dto.getUserAdress() == null || StringUtils.isBlank(dto.getUserAdress().getCity())) {
             errorsResult.put(CITY_VAL_RES, "Podanie nazwy miasta jest wymagane.");
         }
-        if (StringUtils.isBlank(dto.getCountry())) {
+        if (dto.getUserAdress() == null || StringUtils.isBlank(dto.getUserAdress().getCountry())) {
             errorsResult.put(COUNTRY_VAL_RES, "Podanie nazwy kraju jest wymagane.");
         }
-        if (StringUtils.isBlank(dto.getStreet())) {
+        if (dto.getUserAdress() == null || StringUtils.isBlank(dto.getUserAdress().getStreet())) {
             errorsResult.put(STREET_VAL_RES, "Podanie nazwy ulicy jest wymagane.");
         }
         if (StringUtils.isBlank(dto.getBirthDate()) || !dto.getBirthDate().trim().matches(
