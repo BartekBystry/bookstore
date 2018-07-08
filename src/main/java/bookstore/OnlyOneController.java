@@ -1,11 +1,13 @@
 package bookstore;
 
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 @Controller //singleton
 public class OnlyOneController {
@@ -25,7 +27,20 @@ public class OnlyOneController {
         return "cats";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET) //wyswietlanie pustego formularza logowania
+    public String loginForm(Map<String, Object> model) {
+        model.put("form", new CustomerLoginDTO());
+        return "loginForm";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String loginEffect(Map<String, Object> model) {
+        new UserLoginService();
+        return "";
+    }
+
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET) //wyswietlanie pustego formularza
     public String registerForm(Map<String, Object> model) {
         model.put("form", new CustomerRegistrationDTO()); //pusty CustomerRegistrationDTO do przechowywania danych z formularza rejestracji
         // dodatkowo z CustomerRegistrationDto wyciagnijcie pola [street, city, country, zipCode
@@ -35,21 +50,24 @@ public class OnlyOneController {
         return "registerForm";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST) //obsluga przeslanych danych
     public String registerEffect(@ModelAttribute CustomerRegistrationDTO customerRegistrationDto, Map<String, Object> model) {
-        //CustomerRegistrationDTO registrationdto = (CustomerRegistrationDTO) model.get("customerRegistrationDto");
-        Map<String, String> validateUserBasicDataResult = new UserValidationService().validateUserData(customerRegistrationDto); // serwis do walidacji danych uzytkownika
+//        CustomerRegistrationDTO registrationdto = (CustomerRegistrationDTO) model.get("customerRegistrationDto");
+        Map<String, String> validationErrorsMap = new UserValidationService().validateUserData(customerRegistrationDto); //serwis do walidacji danych uzytkownika
         model.put("form", customerRegistrationDto);
-        model.put("countries", Arrays.asList(Countries.values())); // kolekcja krajów (w to miejsce wstawcie kolekcje) - enum Countries (POLSKA,NIEMCY,ROSJA) z polami symbol plName
+        model.put("countries", Arrays.asList(Countries.values())); //kolekcja krajów (w to miejsce wstawcie kolekcje) - enum Countries (POLSKA,NIEMCY,ROSJA) z polami symbol plName
 
-        if (!validateUserBasicDataResult.isEmpty()) { //tu zamiast true powinno sie znalezc sprawdzenie czy walidacja danych sie powiodla (pusta mapa) - najpierw sytuacja kiedy sie nie powiodla
-            model.putAll(validateUserBasicDataResult);
+        if (!validationErrorsMap.isEmpty()) { //sprawdzenie czy walidacja danych sie powiodla (pusta mapa) - najpierw sytuacja kiedy sie nie powiodla
+            model.putAll(validationErrorsMap);
             return "registerForm";
-        } else {
+        } else { //tu jest sytuacja kiedy walidacja jest ok
             try {
-                userRegistrationService.registerUser(customerRegistrationDto);//todo tu nalezy zarejestrowac uzytkownika przez serwis UserRegistrationService
+                userRegistrationService.registerUser(customerRegistrationDto);
+
+                //todo tu nalezy zarejestrowac uzytkownika przez
+                // serwis UserRegistrationService
             } catch (UserExistsException e) {
-                model.put("userExistsException", null); //todo tu wstawcie odpowiedni komunikat "Uzytkownik isnieje" np
+                model.put("userExistsException", "Uzytkownik isnieje!!!!"); //todo tu wstawcie odpowiedni komunikat "Uzytkownik isnieje" np
                 return "registerForm";
             }
             return "registerEffect";

@@ -22,7 +22,7 @@ public class InMemoryCategoryDAO implements CategorySource {
     private static CategoryDataSource categoryDataSource;
 
 
-    protected InMemoryCategoryDAO() {
+    private InMemoryCategoryDAO() {
         categoriesInMemory = initializeCategories();
     }
 

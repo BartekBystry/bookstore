@@ -6,13 +6,13 @@ public class UserRegistrationService {
 
 
     public void registerUser(CustomerRegistrationDTO registrationDTO) {
-
         if (userExistsVer1(registrationDTO)) {
             throw new UserExistsException("User " + registrationDTO.getEmail() + " exists");
         }
         User user = CustomerRegistrationDtoToUserBuilder.rewriteToUser(registrationDTO);
         userDAO.addUser(user);
-        //todo nalezy przepisac dane z  CustomerRegistrationDTO na User -> zapisujac hash hasla i potem dodac uzytkownika do listy userow w userdao
+        //todo nalezy przepisac dane z  CustomerRegistrationDTO na
+        // User -> zapisujac hash hasla i potem dodac uzytkownika do listy userow w userdao
 
 
 //        if (userExistsVer2(customer)) {
@@ -43,6 +43,4 @@ public class UserRegistrationService {
                 .map(user -> user.getEmail())
                 .anyMatch(e -> e.equals(customer.getEmail()));
     }
-
-
 }

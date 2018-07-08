@@ -1,12 +1,15 @@
 package bookstore;
 
+import com.google.common.collect.Lists;
+
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserDAO {
-    private List<User> userList = new ArrayList<User>();
+    private List<User> userList = initializeFromFile();
 
     public List<User> getUserList() {
         return userList;
@@ -18,25 +21,29 @@ public class UserDAO {
     }
 
     private void serializeToFile(List<User> userList) {
-        String userDataPath = this.getClass().getClassLoader().getResource("usersData").getFile();
-        try (FileOutputStream fileOutputStream = new FileOutputStream(userDataPath);
+        String usersDataPath = this.getClass()
+                .getClassLoader().getResource("usersData").getFile();
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(usersDataPath) ;
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
 
             objectOutputStream.writeObject(userList);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
-    
-    private List<User>initializeFromFile(){
-        String userDataPath = this.getClass().getClassLoader().getResource("usersData").getFile();
-        try (FileInputStream fileInputStream = new FileInputStream(userDataPath);
+    private List<User> initializeFromFile() {
+        String usersDataPath = this.getClass()
+                .getClassLoader().getResource("usersData").getFile();
+        try (FileInputStream fileInputStream = new FileInputStream(usersDataPath);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)){
 
-           return  (List<User>)objectInputStream.readObject();
+            return (List<User>) objectInputStream.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         }
         return Arrays.asList();
     }

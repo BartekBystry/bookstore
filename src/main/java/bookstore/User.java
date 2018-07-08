@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 @Setter
 @Getter
 public class User implements Serializable {
 
-    private UserAdress userAddress;
+    private UserAddress userAddress;
     private String firstName;
     private String lastName;
     private String birthDate;
@@ -18,5 +19,6 @@ public class User implements Serializable {
     private String passwordHash;
     private String phone;
     private boolean preferEmails;
+
 
 }
