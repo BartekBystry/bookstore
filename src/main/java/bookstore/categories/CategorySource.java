@@ -1,4 +1,6 @@
-package bookstore;
+package bookstore.categories;
+
+import bookstore.categories.entities.Category;
 
 import java.util.List;
 import java.util.Optional;

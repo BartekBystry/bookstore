@@ -1,4 +1,10 @@
-package bookstore;
+package bookstore.categories.services;
+
+import bookstore.categories.CategorySource;
+import bookstore.categories.DAOs.InMemoryCategoryDAO;
+import bookstore.categories.DTOs.AdminCategoryDTO;
+import bookstore.categories.entities.Category;
+import bookstore.categories.entities.CategoryState;
 
 import java.util.List;
 import java.util.Optional;

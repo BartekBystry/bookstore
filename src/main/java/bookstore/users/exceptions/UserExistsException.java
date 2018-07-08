@@ -1,13 +1,7 @@
-package bookstore;
-
-import java.util.TreeSet;
+package bookstore.users.exceptions;
 
 public class UserExistsException extends RuntimeException {
     public UserExistsException(String message) {
-
-
-
-
 
         super(message);
     }

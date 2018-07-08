@@ -1,8 +1,9 @@
 package bookstore;
 
+import bookstore.categories.entities.Category;
+import bookstore.categories.DAOs.InMemoryCategoryDAO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 

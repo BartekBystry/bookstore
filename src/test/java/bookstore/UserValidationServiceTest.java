@@ -1,5 +1,8 @@
 package bookstore;
 
+import bookstore.users.DTOs.CustomerRegistrationDTO;
+import bookstore.users.entities.UserAddress;
+import bookstore.users.services.UserValidationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -59,8 +62,8 @@ class UserValidationServiceTest {
         CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
         customer.setFirstName("Krzysztof");
         customer.setLastName("Adfsfds");
-        customer.setUserAddress(new UserAdress());
-        UserAdress ua = customer.getUserAddress();
+        customer.setUserAddress(new UserAddress());
+        UserAddress ua = customer.getUserAddress();
         ua.setZipCode("87-123");
         ua.setCity("łódź");
         ua.setCountry("Poland");
@@ -78,8 +81,8 @@ class UserValidationServiceTest {
         CustomerRegistrationDTO customer = new CustomerRegistrationDTO();
         customer.setFirstName(" Krzysztof ");
         customer.setLastName(" Adfsfds ");
-        customer.setUserAddress(new UserAdress());
-        UserAdress ua = customer.getUserAddress();
+        customer.setUserAddress(new UserAddress());
+        UserAddress ua = customer.getUserAddress();
         ua.setZipCode("87-123");
         ua.setCity("łódź");
         ua.setCountry("Poland");

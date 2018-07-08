@@ -1,5 +1,5 @@
-import bookstore.AdminCategoryDTO;
-import bookstore.Category;
+import bookstore.categories.DTOs.AdminCategoryDTO;
+import bookstore.categories.entities.Category;
 import com.google.common.collect.Lists;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LambdasExample {
 
