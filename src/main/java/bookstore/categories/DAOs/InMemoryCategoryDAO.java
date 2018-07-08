@@ -1,7 +1,5 @@
 package bookstore.categories.DAOs;
 
-import bookstore.categories.CategoryDataSource;
-import bookstore.categories.CategorySource;
 import bookstore.categories.entities.Category;
 import org.apache.commons.lang3.NotImplementedException;
 

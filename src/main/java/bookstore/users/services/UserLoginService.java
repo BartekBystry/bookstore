@@ -6,10 +6,13 @@ import bookstore.users.DAOs.UserDAO;
 import bookstore.users.exceptions.UserNotExistException;
 import bookstore.users.entities.User;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserLoginService {
-
-    private UserDAO userDAO = new UserDAO(); //FIXME
+    @Autowired
+    private UserDAO userDAO;
 
     public void login(CustomerLoginDTO customerLoginDTO) {
         User user = userDAO.getUserList()
@@ -21,9 +24,11 @@ public class UserLoginService {
         if (passwordIsNotCorrect(customerLoginDTO, user)){
             throw new PasswordDoesNotMatchException("Wrong password");
         }
+        UserContextHolder.logInUser(user);
     }
 
     private boolean passwordIsNotCorrect(CustomerLoginDTO customerLoginDTO, User user) {
         return !DigestUtils.sha512Hex(customerLoginDTO.getPassword().trim()).equals(user.getPasswordHash());
     }
+
 }

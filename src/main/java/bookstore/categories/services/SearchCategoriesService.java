@@ -1,6 +1,6 @@
 package bookstore.categories.services;
 
-import bookstore.categories.CategorySource;
+import bookstore.categories.DAOs.CategorySource;
 import bookstore.categories.DAOs.InMemoryCategoryDAO;
 import bookstore.categories.DTOs.AdminCategoryDTO;
 import bookstore.categories.entities.Category;

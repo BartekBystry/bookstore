@@ -1,4 +1,4 @@
-package bookstore.categories;
+package bookstore.categories.DAOs;
 
 import bookstore.categories.entities.Category;
 
